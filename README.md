@@ -5,6 +5,8 @@ project structure:
 - our actual train function is train.py
 - data preprocessing utils & synthesis scripts goes under data_utils/
 
+currently our stuff is just unet related stuff, but you baiscally just change the code to fit what we actually want to do.
+
 setup:
 run the following commands in a terminal:
 1. `python -m venv venv`
