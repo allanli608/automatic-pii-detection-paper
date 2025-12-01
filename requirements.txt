@@ -1,1 +1,4 @@
-# populate this as we go..
+python-dotenv
+openai
+faker
+spacy

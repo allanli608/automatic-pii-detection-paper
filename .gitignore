@@ -1,2 +1,6 @@
 venv/
 data/
+.history/
+
+.env
+*output.txt
