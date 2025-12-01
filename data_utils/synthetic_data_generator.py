@@ -127,7 +127,7 @@ def corrupt_pii(value, label_type):
                 lambda x: re.sub(r"\D", "", x), # 1234567890
                 lambda x: re.sub(r"\D", "", x)[:3] + "." + re.sub(r"\D", "", x)[3:6] + "." + re.sub(r"\D", "", x)[6:], # 123.456.7890
                 lambda x: re.sub(r"\D", "", x)[:3] + " " + re.sub(r"\D", "", x)[3:6] + " " + re.sub(r"\D", "", x)[6:], # 123 456 7890
-                lambda x: f"({re.sub(r'\D', '', x)[:3]}) {re.sub(r'\D', '', x)[3:6]}-{re.sub(r'\D', '', x)[6:]}", # (123) 456-7890
+                lambda x: "(" + re.sub(r'\D', '', x)[:3] + ") " + re.sub(r'\D', '', x)[3:6] + "-" + re.sub(r'\D', '', x)[6:], # (123) 456-7890
             ]
             try:
                 return random.choice(formats)(value)
