@@ -7,16 +7,16 @@ pii idea is cool :p
 - all work and final results should be under `final_notebook.ipynb`
 
 **Note:**
-currently our stuff is just unet related stuff, but you baiscally just change the code to fit what we actually want to do.
+currently our stuff is just unet related stuff, but you baiscally just change the code to fit what we actually want to do. @allenna when you finish you should delete this note
 
 ## Setup:
+**FIRST, INSTALL MINICONDA!!!**
 assumes you have miniconda installed (if not install it, you can test that it works using `conda --version`)
 run the following commands in a terminal:
 1. `conda env create -f environment_local.yml`
-4. DATA SETUP:
-    1. abc
-    2. def
-5. run `python train.py`
+2. make a COPY of the file `.env.example` in the same root, and call it `.env`. please fill in the api keys as necessary
+3. download datasets using `get_datasets.sh`
 
 
-if you need to update the library with new packages run: `conda env update -f environment_local.yml --prune`
+## VERY IMPORTANT!
+if you need to update the library with new packages run OR you pulled recnetly and the `environment_local.yml` changed, then: `conda env update -f environment_local.yml --prune`
