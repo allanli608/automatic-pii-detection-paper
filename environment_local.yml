@@ -1,0 +1,27 @@
+name: pii-detection-local
+channels:
+  - pytorch
+  - conda-forge
+  - defaults
+dependencies:
+  # --- CONDA PACKAGES ---
+  - python=3.10
+  - ipykernel
+  - pytorch
+  - cpuonly # this needs to change if using a GPU
+  - numpy
+  - pandas
+  - matplotlib
+  - jupyterlab
+  - scikit-learn
+  
+  # --- PIP PACKAGES ---
+  - pip
+  - pip:
+    - kaggle
+    - python-dotenv
+    - tqdm
+    - ipywidgets
+    - transformers
+    - tokenizers
+    - seqeval
