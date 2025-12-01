@@ -14,6 +14,8 @@ dependencies:
   - matplotlib
   - jupyterlab
   - scikit-learn
+  - ipywidgets
+  - spacy
   
   # --- PIP PACKAGES ---
   - pip
@@ -21,7 +23,8 @@ dependencies:
     - kaggle
     - python-dotenv
     - tqdm
-    - ipywidgets
     - transformers
     - tokenizers
     - seqeval
+    - openai
+    - faker
