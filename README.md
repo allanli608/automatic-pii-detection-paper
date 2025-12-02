@@ -20,3 +20,6 @@ run the following commands in a terminal:
 
 ## VERY IMPORTANT!
 if you need to update the library with new packages run OR you pulled recnetly and the `environment_local.yml` changed, then: `conda env update -f environment_local.yml --prune`
+
+## Formatter
+please download black formatter from vscode extensions

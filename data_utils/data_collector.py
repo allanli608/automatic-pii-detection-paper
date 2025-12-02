@@ -1,8 +1,8 @@
-
 import argparse
 import os
 import zipfile
 import requests
+
 
 def print_menu():
     menu = """
@@ -18,17 +18,15 @@ def print_menu():
 
 def download_dataset(url, folder_path):
     try:
-        
-
         os.makedirs(folder_path, exist_ok=True)
         save_path = os.path.join(folder_path, "dataset.zip")
         response = requests.get(url)
-        with open(save_path, 'wb') as file:
+        with open(save_path, "wb") as file:
             file.write(response.content)
         print(f"Default Dataset downloaded successfully and saved to {save_path}")
-        
+
         # Unzip the dataset
-        with zipfile.ZipFile(save_path, 'r') as zip_ref:
+        with zipfile.ZipFile(save_path, "r") as zip_ref:
             zip_ref.extractall(folder_path)
         print(f"Dataset extracted to {folder_path}")
     except Exception as e:
@@ -40,15 +38,18 @@ def download_default_dataset():
     folder_path = "data/default_dataset"
     download_dataset(url, folder_path)
 
+
 def download_nbroad_dataset():
     url = "https://www.kaggle.com/api/v1/datasets/download/nbroad/pii-dd-mistral-generated"
     folder_path = "data/nbroad_dataset"
     download_dataset(url, folder_path)
 
+
 def download_mpware_dataset():
     url = "https://www.kaggle.com/api/v1/datasets/download/mpware/pii-mixtral8x7b-generated-essays"
     folder_path = "data/mpware_dataset"
     download_dataset(url, folder_path)
+
 
 def download_all_datasets():
     download_default_dataset()
@@ -58,34 +59,31 @@ def download_all_datasets():
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate synthetic PII data.")
-    parser.add_argument("--download_all", action="store_true", help="Download all datasets")
+    parser.add_argument(
+        "--download_all", action="store_true", help="Download all datasets"
+    )
     args = parser.parse_args()
 
     if args.download_all:
         download_all_datasets()
-            
+
     else:
         while True:
             print_menu()
             choice = input("Enter your choice: ")
-            
-            if choice == '1':
+
+            if choice == "1":
                 download_default_dataset()
-            
-            elif choice == '2':
+
+            elif choice == "2":
                 download_nbroad_dataset()
 
-            elif choice == '3':
+            elif choice == "3":
                 download_mpware_dataset()
-            elif choice == '4':
+            elif choice == "4":
                 download_all_datasets()
-            elif choice == '5':
+            elif choice == "5":
                 print("Exiting...")
                 break
             else:
                 print("Invalid choice. Please try again.")
-
-
-
-
-    

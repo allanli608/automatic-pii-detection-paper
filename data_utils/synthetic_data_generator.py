@@ -11,7 +11,6 @@ from openai import OpenAI
 import numpy as np
 
 
-
 # PARAMETERS WE CAN TUNE FOR MORE OR LESS REALISTIC DATA
 DATA_CORRUPTION_PROBABILITY = 0.3  # Probability to corrupt PII values (0.0 - 1.0)
 NAME_CASE_CHANGE_PROBABILITY = 0.6  # Probability to change name case
@@ -28,7 +27,7 @@ load_dotenv()
 
 # Configuration
 API_KEY = os.getenv("OPENROUTER_API_KEY")
-MODEL = "x-ai/grok-4.1-fast:free" 
+MODEL = "x-ai/grok-4.1-fast:free"
 DATASET_PATH = "data/default_dataset/train.json"
 OUTPUT_PATH = "data/synthetic_dataset/train.json"
 
@@ -38,20 +37,25 @@ try:
 except OSError:
     print("Downloading spacy model...")
     from spacy.cli import download
+
     download("en_core_web_sm")
     nlp = spacy.load("en_core_web_sm")
 
 fake = Faker()
 
+
 def random_id_num():
     patterns = [
-        lambda: ''.join(random.choices('0123456789', k=random.randint(8, 12))), # Simple numeric
-        lambda: f"{random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ')}{''.join(random.choices('0123456789', k=8))}", # Letter prefix
-        lambda: f"{''.join(random.choices('0123456789', k=3))}-{ ''.join(random.choices('0123456789', k=2))}-{''.join(random.choices('0123456789', k=4))}", # SSN style
-        lambda: f"{''.join(random.choices('0123456789', k=9))}", # 9-digit
-        lambda: f"{''.join(random.choices('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', k=10))}" # Alphanumeric
+        lambda: "".join(
+            random.choices("0123456789", k=random.randint(8, 12))
+        ),  # Simple numeric
+        lambda: f"{random.choice('ABCDEFGHIJKLMNOPQRSTUVWXYZ')}{''.join(random.choices('0123456789', k=8))}",  # Letter prefix
+        lambda: f"{''.join(random.choices('0123456789', k=3))}-{ ''.join(random.choices('0123456789', k=2))}-{''.join(random.choices('0123456789', k=4))}",  # SSN style
+        lambda: f"{''.join(random.choices('0123456789', k=9))}",  # 9-digit
+        lambda: f"{''.join(random.choices('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', k=10))}",  # Alphanumeric
     ]
     return random.choice(patterns)()
+
 
 PII_MAPPING = {
     "<NAME_STUDENT>": {"label": "NAME_STUDENT", "generator": fake.name},
@@ -63,8 +67,10 @@ PII_MAPPING = {
     "<ID_NUM>": {"label": "ID_NUM", "generator": random_id_num},
 }
 
+
 def get_random_sample(data):
     return random.choice(data)
+
 
 def generate_prompt(sample_text):
     placeholders = ", ".join(PII_MAPPING.keys())
@@ -87,12 +93,13 @@ def generate_prompt(sample_text):
     )
     return prompt
 
+
 def call_llm(prompt):
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1",
         api_key=API_KEY,
     )
-    
+
     try:
         response = client.chat.completions.create(
             model=MODEL,
@@ -103,15 +110,16 @@ def call_llm(prompt):
         print(f"Error calling LLM: {e}")
         return None
 
+
 def corrupt_pii(value, label_type):
     if random.random() > DATA_CORRUPTION_PROBABILITY:
         return value
-    
+
     # whitespace corruption
     if random.random() < WHITESPACE_CORRUPTION_PROBABILITY:
         idx = random.randint(0, len(value))
         value = value[:idx] + " " + value[idx:]
-    
+
     if label_type == "NAME_STUDENT":
         if random.random() > NAME_CASE_CHANGE_PROBABILITY:
             return value.lower()
@@ -120,14 +128,27 @@ def corrupt_pii(value, label_type):
         elif random.random() < NAME_FIRST_ONLY_PROBABILITY:
             # First name only
             return value.split()[0]
-            
+
     elif label_type == "PHONE_NUM":
         if random.random() < PHONE_FORMAT_CHANGE_PROBABILITY:
             formats = [
-                lambda x: re.sub(r"\D", "", x), # 1234567890
-                lambda x: re.sub(r"\D", "", x)[:3] + "." + re.sub(r"\D", "", x)[3:6] + "." + re.sub(r"\D", "", x)[6:], # 123.456.7890
-                lambda x: re.sub(r"\D", "", x)[:3] + " " + re.sub(r"\D", "", x)[3:6] + " " + re.sub(r"\D", "", x)[6:], # 123 456 7890
-                lambda x: "(" + re.sub(r'\D', '', x)[:3] + ") " + re.sub(r'\D', '', x)[3:6] + "-" + re.sub(r'\D', '', x)[6:], # (123) 456-7890
+                lambda x: re.sub(r"\D", "", x),  # 1234567890
+                lambda x: re.sub(r"\D", "", x)[:3]
+                + "."
+                + re.sub(r"\D", "", x)[3:6]
+                + "."
+                + re.sub(r"\D", "", x)[6:],  # 123.456.7890
+                lambda x: re.sub(r"\D", "", x)[:3]
+                + " "
+                + re.sub(r"\D", "", x)[3:6]
+                + " "
+                + re.sub(r"\D", "", x)[6:],  # 123 456 7890
+                lambda x: "("
+                + re.sub(r"\D", "", x)[:3]
+                + ") "
+                + re.sub(r"\D", "", x)[3:6]
+                + "-"
+                + re.sub(r"\D", "", x)[6:],  # (123) 456-7890
             ]
             try:
                 return random.choice(formats)(value)
@@ -139,70 +160,75 @@ def corrupt_pii(value, label_type):
             return value.lower()
         if random.random() < EMAIL_CASE_CHANGE_PROBABILITY * 0.33:
             return value.upper()
-        
+
     elif label_type == "USERNAME":
         if random.random() < USERNAME_MODIFICATION_PROBABILITY:
             if random.random() < 0.5:
                 return value + str(random.randint(1, 99))
             else:
                 return value.lower()
-                
+
     elif label_type == "STREET_ADDRESS":
         if random.random() < ADDRESS_FORMAT_CHANGE_PROBABILITY:
             return value.replace("\n", ", ")
         if random.random() < ADDRESS_FORMAT_CHANGE_PROBABILITY * 0.4:
-            value = value.replace("Street", "St.").replace("Avenue", "Ave.").replace("Road", "Rd.")
-            
+            value = (
+                value.replace("Street", "St.")
+                .replace("Avenue", "Ave.")
+                .replace("Road", "Rd.")
+            )
+
     elif label_type == "ID_NUM":
         if random.random() < ID_FORMAT_CHANGE_PROBABILITY:
             return re.sub(r"[\-\s]", "", value)
-        
 
     return value
 
+
 def fill_template_and_label(template, doc_id):
     placeholder_pattern = re.compile("|".join(map(re.escape, PII_MAPPING.keys())))
-    
+
     matches = list(placeholder_pattern.finditer(template))
-    
+
     full_text = ""
     last_end = 0
     spans = []
-    
+
     for match in matches:
         start, end = match.span()
         placeholder = match.group()
-        
+
         full_text += template[last_end:start]
-        
+
         fake_value = PII_MAPPING[placeholder]["generator"]()
         fake_value = fake_value.replace("\n", ", ")
-        
+
         # Apply corruption/noise to make data more realistic
         fake_value = corrupt_pii(fake_value, PII_MAPPING[placeholder]["label"])
-        
+
         value_start = len(full_text)
         full_text += fake_value
         value_end = len(full_text)
-        
+
         spans.append((value_start, value_end, PII_MAPPING[placeholder]["label"]))
-        
+
         last_end = end
-        
 
     full_text += template[last_end:]
-    
+
     # Tokenize
     doc = nlp(full_text)
-    
+
     tokens = [token.text for token in doc]
     trailing_whitespace = [bool(token.whitespace_) for token in doc]
     labels = ["O"] * len(doc)
-    
+
     # Assign labels
     for span_start, span_end, label_type in spans:
-        tokens_in_span = [t for t in doc if t.idx >= span_start and t.idx + len(t.text) <= span_end]
-        
+        tokens_in_span = [
+            t for t in doc if t.idx >= span_start and t.idx + len(t.text) <= span_end
+        ]
+
         for i, token in enumerate(tokens_in_span):
             if i == 0:
                 labels[token.i] = f"B-{label_type}"
@@ -214,8 +240,9 @@ def fill_template_and_label(template, doc_id):
         "full_text": full_text,
         "tokens": tokens,
         "trailing_whitespace": trailing_whitespace,
-        "labels": labels
+        "labels": labels,
     }
+
 
 def process_single_generation(i, data):
     try:
@@ -224,30 +251,35 @@ def process_single_generation(i, data):
         sample_text = sample.get("full_text", "")
         if not sample_text:
             return None
-            
+
         prompt = generate_prompt(sample_text)
         template = call_llm(prompt)
-        
+
         if template:
             # Clean up potential markdown code blocks from LLM
             template = template.replace("```json", "").replace("```", "").strip()
-            
+
             result = fill_template_and_label(template, f"synthetic_{i}")
             return result
     except Exception as e:
         print(f"Error processing sample {i}: {e}")
     return None
 
+
 def main():
     parser = argparse.ArgumentParser(description="Generate synthetic PII data.")
-    parser.add_argument("--num_samples", type=int, default=10, help="Number of samples to generate")
-    parser.add_argument("--workers", type=int, default=20, help="Number of parallel workers")
+    parser.add_argument(
+        "--num_samples", type=int, default=10, help="Number of samples to generate"
+    )
+    parser.add_argument(
+        "--workers", type=int, default=20, help="Number of parallel workers"
+    )
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
     args = parser.parse_args()
-    
+
     random.seed(args.seed)
     Faker.seed(args.seed)
-    
+
     print(f"Loading dataset from {DATASET_PATH}...")
     try:
         with open(DATASET_PATH, "r") as f:
@@ -258,34 +290,37 @@ def main():
 
     print(f"Generating {args.num_samples} samples with {args.workers} workers...")
     print(f"Saving results incrementally to {OUTPUT_PATH}...")
-    
-    
+
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     with open(OUTPUT_PATH, "w") as f:
         f.write("[\n")
-        
+
         first_entry = True
         count = 0
-    
+
         with ThreadPoolExecutor(max_workers=args.workers) as executor:
-            futures = [executor.submit(process_single_generation, i, data) for i in range(args.num_samples)]
-            
+            futures = [
+                executor.submit(process_single_generation, i, data)
+                for i in range(args.num_samples)
+            ]
+
             for future in as_completed(futures):
                 res = future.result()
                 if res:
                     if not first_entry:
                         f.write(",\n")
-                    
+
                     json.dump(res, f, indent=2)
                     f.flush()
-                    
+
                     first_entry = False
                     count += 1
                     print(f"Generated sample {count}/{args.num_samples}")
-        
+
         f.write("\n]")
-        
+
     print("Done.")
+
 
 if __name__ == "__main__":
     main()
