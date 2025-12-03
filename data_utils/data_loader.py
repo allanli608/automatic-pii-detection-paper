@@ -5,25 +5,6 @@ import json
 from sklearn.model_selection import train_test_split
 
 
-ALL_LABELS = [
-    "B-EMAIL",
-    "B-ID_NUM",
-    "B-NAME_STUDENT",
-    "B-PHONE_NUM",
-    "B-STREET_ADDRESS",
-    "B-URL_PERSONAL",
-    "B-USERNAME",
-    "I-ID_NUM",
-    "I-NAME_STUDENT",
-    "I-PHONE_NUM",
-    "I-STREET_ADDRESS",
-    "I-URL_PERSONAL",
-    "O",
-]
-LABEL2ID = {l: i for i, l in enumerate(ALL_LABELS)}
-ID2LABEL = {i: l for l, i in LABEL2ID.items()}
-
-
 class PIIDataset(Dataset):
     def __init__(self, data, tokenizer, label2id, max_length=512, inference_mode=False):
         """
@@ -37,8 +18,9 @@ class PIIDataset(Dataset):
         """
         self.data = data
         self.tokenizer = tokenizer
+        self.label2id = label2id
         self.max_length = max_length
-        self.is_test = is_test
+        self.inference_mode = inference_mode
 
     def __len__(self):
         return len(self.data)
@@ -101,6 +83,9 @@ def get_loaders(train_json_path, test_json_path, model_name, batch_size=4):
 
     # Split Train into Train/Validation
     train_data, val_data = train_test_split(raw_train, test_size=0.2, random_state=42)
+    # debug mode: use smaller dataset
+    train_data = train_data[:64]
+    val_data = val_data[:16]
 
     tokenizer = DebertaV2TokenizerFast.from_pretrained(model_name)
 
