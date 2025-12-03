@@ -30,10 +30,7 @@ dependencies:
     # because mirrors likely don't have the "cu128" wheels yet.
     - --extra-index-url https://download.pytorch.org/whl/cu128
     
-    - torch>=2.7.0
-    - torchvision
-    - torchaudio
-    
+    - torch>=2.7.0    
     # 3. Standard Packages (Will use the fast Tsinghua mirror above)
     - kaggle
     - python-dotenv
