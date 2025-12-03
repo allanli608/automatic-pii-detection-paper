@@ -3,3 +3,4 @@ data/
 .history/
 *output.txt
 .env
+__pycache__/
