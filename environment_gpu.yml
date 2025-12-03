@@ -1,0 +1,45 @@
+name: pii-detection-5090-cn
+channels:
+  # --- TSINGHUA MIRRORS (Speed up Conda) ---
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+  - defaults # Fallback
+show_channel_urls: true
+dependencies:
+  # --- CONDA PACKAGES (Fast download from TUNA) ---
+  - python=3.10
+  - ipykernel
+  - numpy
+  - pandas
+  - matplotlib
+  - jupyterlab
+  - scikit-learn
+  - ipywidgets
+  - spacy
+
+  # --- PIP PACKAGES ---
+  - pip
+  - pip:
+    # 1. Set Default Mirror to Tsinghua (Speeds up generic pip packages)
+    - -i https://pypi.tuna.tsinghua.edu.cn/simple
+    
+    # 2. Force Official Source ONLY for PyTorch (Required for RTX 5090/CUDA 12.8)
+    # Note: This specific download might be slow in China, but it is necessary 
+    # because mirrors likely don't have the "cu128" wheels yet.
+    - --extra-index-url https://download.pytorch.org/whl/cu128
+    
+    - torch>=2.7.0
+    - torchvision
+    - torchaudio
+    
+    # 3. Standard Packages (Will use the fast Tsinghua mirror above)
+    - kaggle
+    - python-dotenv
+    - tqdm
+    - transformers
+    - tokenizers
+    - seqeval
+    - openai
+    - faker
