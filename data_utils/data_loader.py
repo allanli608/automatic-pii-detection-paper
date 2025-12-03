@@ -103,8 +103,17 @@ def get_datasets(json_path, model_path="microsoft/deberta-v3-base"):
     with open(json_path, "r") as f:
         data = json.load(f)
 
-    train_data, val_data = train_test_split(data, test_size=0.2, random_state=42)
-    tokenizer = AutoTokenizer.from_pretrained(model_path)
+    # Create Label Mappings from TRAIN data only
+    all_labels = sorted(list(set([l for item in raw_train for l in item["labels"]])))
+    label2id = {l: i for i, l in enumerate(all_labels)}
+    id2label = {i: l for l, i in label2id.items()}
+
+    # Split Train into Train/Validation
+    # This is crucial: "Train" is for learning, "Val" is to check performance.
+    train_data, val_data = train_test_split(raw_train, test_size=0.2, random_state=42)
+
+    tokenizer = AutoTokenizer.from_pretrained(model_name, use_fast=False)
+    collator = DataCollatorForTokenClassification(tokenizer, pad_to_multiple_of=16)
 
     train_dataset = PIIDataset(train_data, tokenizer, is_test=False)
     val_dataset = PIIDataset(val_data, tokenizer, is_test=False)
