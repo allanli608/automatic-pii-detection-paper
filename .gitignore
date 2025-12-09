@@ -4,3 +4,4 @@ data/
 *output.txt
 .env
 __pycache__/
+.DS_STORE
