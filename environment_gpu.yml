@@ -40,3 +40,4 @@ dependencies:
     - seqeval
     - openai
     - faker
+    - requests
