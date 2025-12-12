@@ -1,5 +1,5 @@
 # Data paths (relative to project root)
-DATA_DIR = "data"
+DATA_DIR = "data/default_dataset"
 TRAIN_JSON = f"{DATA_DIR}/train.json"
 TEST_JSON = f"{DATA_DIR}/test.json"   # can be dummy if you don't have one yet
 
