@@ -13,7 +13,7 @@ MODEL_NAME = "microsoft/deberta-v3-base"
 OUTPUT_DIR_BASE = "output"
 
 NUM_FOLDS = 4
-BATCH_SIZE = 8
+BATCH_SIZE = 32
 NUM_EPOCHS = 3
 LEARNING_RATE = 2e-5
 WARMUP_RATIO = 0.1

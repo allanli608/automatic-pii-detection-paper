@@ -1,6 +1,8 @@
 venv/
 data/
 .history/
+models/
+output/
 *output.txt
 .env
 __pycache__/

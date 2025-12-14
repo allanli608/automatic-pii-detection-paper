@@ -1,14 +1,12 @@
 name: pii-detection-5090-cn
 channels:
-  # --- TSINGHUA MIRRORS (Speed up Conda) ---
+  # --- TSINGHUA MIRRORS ---
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
-  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
-  - defaults # Fallback
+  - defaults
 show_channel_urls: true
 dependencies:
-  # --- CONDA PACKAGES (Fast download from TUNA) ---
   - python=3.10
   - ipykernel
   - numpy
@@ -18,25 +16,31 @@ dependencies:
   - scikit-learn
   - ipywidgets
   - spacy
+  - pip 
 
   # --- PIP PACKAGES ---
-  - pip
   - pip:
-    # 1. Set Default Mirror to Tsinghua (Speeds up generic pip packages)
     - -i https://pypi.tuna.tsinghua.edu.cn/simple
+    - --extra-index-url https://download.pytorch.org/whl/nightly/cu128
     
-    # 2. Force Official Source ONLY for PyTorch (Required for RTX 5090/CUDA 12.8)
-    # Note: This specific download might be slow in China, but it is necessary 
-    # because mirrors likely don't have the "cu128" wheels yet.
-    - --extra-index-url https://download.pytorch.org/whl/cu128
+    - --pre
     
-    - torch>=2.7.0    
-    # 3. Standard Packages (Will use the fast Tsinghua mirror above)
+    # 4. Core Dependencies
+    - torch>=2.7.0.dev 
+    - torchvision       
+    - torchaudio
+    
+    # 5. Hugging Face & Training Stack
+    - transformers==4.39.0
+    - accelerate        
+    - tokenizers
+    - seqeval
+    - sentencepiece
+    - protobuf
+    
+    # 6. Utilities
     - kaggle
     - python-dotenv
     - tqdm
-    - transformers
-    - tokenizers
-    - seqeval
     - openai
     - faker

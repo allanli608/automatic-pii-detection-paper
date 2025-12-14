@@ -65,7 +65,7 @@ def train_fold(fold):
         dataloader_num_workers=config.NUM_WORKERS,
         fp16=config.FP16,
         gradient_checkpointing=True,
-        eval_strategy="epoch",
+        evaluation_strategy="epoch",
         save_strategy="epoch",
         save_total_limit=1,
         load_best_model_at_end=True,
