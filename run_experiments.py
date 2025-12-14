@@ -8,7 +8,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 if PROJECT_ROOT not in sys.path:
     sys.path.append(PROJECT_ROOT)
 
-from model_src.train_baseline import main as run_once
+from train_baseline import main as run_once
 
 
 def set_global_seed(seed: int):
