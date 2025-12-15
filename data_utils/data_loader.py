@@ -1,112 +1,113 @@
-import json
-import numpy as np
 import torch
-from torch.utils.data import Dataset, DataLoader
-from transformers import AutoTokenizer, DataCollatorForTokenClassification
+from torch.utils.data import Dataset
+from transformers import DebertaV2TokenizerFast, DataCollatorForTokenClassification
+import json
 from sklearn.model_selection import train_test_split
 
 
-ALL_LABELS = [
-    "B-EMAIL",
-    "B-ID_NUM",
-    "B-NAME_STUDENT",
-    "B-PHONE_NUM",
-    "B-STREET_ADDRESS",
-    "B-URL_PERSONAL",
-    "B-USERNAME",
-    "I-ID_NUM",
-    "I-NAME_STUDENT",
-    "I-PHONE_NUM",
-    "I-STREET_ADDRESS",
-    "I-URL_PERSONAL",
-    "O",
-]
-LABEL2ID = {l: i for i, l in enumerate(ALL_LABELS)}
-ID2LABEL = {i: l for l, i in LABEL2ID.items()}
-
-
 class PIIDataset(Dataset):
-    def __init__(self, data, tokenizer, max_length=1024, is_test=False):
+    def __init__(self, data, tokenizer, label2id, max_length=512, inference_mode=False):
+        """
+        Args:
+            data (list): List of dicts from the raw JSON.
+                         Each item has at least "tokens", and during training also "labels".
+            tokenizer: Hugging Face tokenizer instance.
+            label2id (dict): Mapping of label strings to integers.
+            max_length (int): Max token length.
+            inference_mode (bool): If True, we ignore labels (for test.json).
+        """
         self.data = data
         self.tokenizer = tokenizer
+        self.label2id = label2id
         self.max_length = max_length
-        self.is_test = is_test
+        self.inference_mode = inference_mode
 
     def __len__(self):
         return len(self.data)
 
     def __getitem__(self, idx):
-        example = self.data[idx]
-        text = []
-        token_map = []
-        labels = []
+        item = self.data[idx]
 
-        for i, (t, ws) in enumerate(
-            zip(example["tokens"], example["trailing_whitespace"])
-        ):
-            text.append(t)
-            token_map.extend([i] * len(t))
+        # We use the provided tokenization directly
+        tokens = item["tokens"]
 
-            if not self.is_test:
-                l = example["labels"][i]
-                labels.extend([l] * len(t))
-
-            if ws:
-                text.append(" ")
-                token_map.append(-1)
-                if not self.is_test:
-                    labels.append("O")
-
-        full_text = "".join(text)
-        tokenized = self.tokenizer(
-            full_text,
-            return_offsets_mapping=True,
-            max_length=self.max_length,
+        # Tokenize as pre-split words
+        enc = self.tokenizer(
+            tokens,
+            is_split_into_words=True,
             truncation=True,
+            max_length=self.max_length,
         )
 
-        token_labels = []
+        word_ids = enc.word_ids()  # list of length seq_len
+        labels_ids = []
 
-        for start_idx, end_idx in tokenized.offset_mapping:
-            if start_idx == 0 and end_idx == 0:
-                token_labels.append(-100)
-                continue
-
-            if full_text[start_idx].isspace():
-                start_idx += 1
-
-            try:
-                if start_idx < len(labels):
-                    label_str = labels[start_idx]
-                    token_labels.append(LABEL2ID.get(label_str, LABEL2ID["O"]))
+        if self.inference_mode:
+            # No labels in test mode
+            labels_ids = [-100] * len(word_ids)
+        else:
+            orig_labels = item["labels"]
+            for w_id in word_ids:
+                if w_id is None:
+                    # special tokens: [CLS], [SEP], padding, etc.
+                    labels_ids.append(-100)
                 else:
-                    token_labels.append(-100)
-            except IndexError:
-                token_labels.append(-100)
+                    label_str = orig_labels[w_id]
+                    labels_ids.append(self.label2id[label_str])
 
-        output = {
-            "input_ids": torch.tensor(tokenized["input_ids"], dtype=torch.long),
-            "attention_mask": torch.tensor(
-                tokenized["attention_mask"], dtype=torch.long
-            ),
+        enc["labels"] = labels_ids
+
+        out = {
+            "input_ids": torch.tensor(enc["input_ids"], dtype=torch.long),
+            "attention_mask": torch.tensor(enc["attention_mask"], dtype=torch.long),
+            "labels": torch.tensor(enc["labels"], dtype=torch.long),
         }
 
-        if not self.is_test:
-            output["labels"] = torch.tensor(token_labels, dtype=torch.long)
-        else:
-            output["document"] = example["document"]
+        # Preserve document id in inference mode if present
+        if self.inference_mode and "document" in item:
+            out["document"] = item["document"]
 
-        return output
+        return out
 
 
-def get_datasets(json_path, model_path="microsoft/deberta-v3-base"):
-    with open(json_path, "r") as f:
-        data = json.load(f)
+def get_loaders(train_json_path, test_json_path, model_name, batch_size=4):
 
-    train_data, val_data = train_test_split(data, test_size=0.2, random_state=42)
-    tokenizer = AutoTokenizer.from_pretrained(model_path)
+    # --- 1. SETUP TRAIN DATA ---
+    with open(train_json_path, "r", encoding="utf-8") as f:
+        raw_train = json.load(f)
 
-    train_dataset = PIIDataset(train_data, tokenizer, is_test=False)
-    val_dataset = PIIDataset(val_data, tokenizer, is_test=False)
+    # Create Label Mappings from TRAIN data only
+    all_labels = sorted(list(set(l for item in raw_train for l in item["labels"])))
+    label2id = {l: i for i, l in enumerate(all_labels)}
+    id2label = {i: l for l, i in label2id.items()}
 
-    return train_dataset, val_dataset, tokenizer
+    # Split Train into Train/Validation
+    train_data, val_data = train_test_split(raw_train, test_size=0.2, random_state=42)
+    # debug mode: use smaller dataset
+    train_data = train_data[:64]
+    val_data = val_data[:16]
+
+    tokenizer = DebertaV2TokenizerFast.from_pretrained(model_name)
+
+    collator = DataCollatorForTokenClassification(tokenizer, pad_to_multiple_of=16)
+
+    train_ds = PIIDataset(train_data, tokenizer, label2id, inference_mode=False)
+    val_ds = PIIDataset(val_data, tokenizer, label2id, inference_mode=False)
+
+    from torch.utils.data import DataLoader
+
+    train_loader = DataLoader(
+        train_ds, batch_size=batch_size, shuffle=True, collate_fn=collator
+    )
+    val_loader = DataLoader(
+        val_ds, batch_size=batch_size, shuffle=False, collate_fn=collator
+    )
+
+    # --- 2. SETUP TEST DATA (INFERENCE) ---
+    with open(test_json_path, "r", encoding="utf-8") as f:
+        raw_test = json.load(f)
+
+    test_ds = PIIDataset(raw_test, tokenizer, label2id, inference_mode=True)
+    test_loader = DataLoader(test_ds, batch_size=1, shuffle=False)
+
+    return train_loader, val_loader, test_loader, label2id, id2label
