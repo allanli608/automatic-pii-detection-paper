@@ -4,6 +4,8 @@ import argparse
 import os
 import re
 import spacy
+import time
+import threading
 from faker import Faker
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dotenv import load_dotenv
@@ -11,23 +13,24 @@ from openai import OpenAI
 import numpy as np
 
 
-# PARAMETERS WE CAN TUNE FOR MORE OR LESS REALISTIC DATA
-DATA_CORRUPTION_PROBABILITY = 0.3  # Probability to corrupt PII values (0.0 - 1.0)
-NAME_CASE_CHANGE_PROBABILITY = 0.6  # Probability to change name case
-PHONE_FORMAT_CHANGE_PROBABILITY = 1.0  # Probability to change phone format
-EMAIL_CASE_CHANGE_PROBABILITY = 0.3  # Probability to change email case
-USERNAME_MODIFICATION_PROBABILITY = 0.5  # Probability to modify username
-ADDRESS_FORMAT_CHANGE_PROBABILITY = 0.5  # Probability to change address format
-ID_FORMAT_CHANGE_PROBABILITY = 0.5  # Probability to change ID number format
-WHITESPACE_CORRUPTION_PROBABILITY = 0.1  # Probability to add random whitespace
-NAME_FIRST_ONLY_PROBABILITY = 0.1  # Probability to use first name only
+DATA_CORRUPTION_PROBABILITY = 0.3
+NAME_CASE_CHANGE_PROBABILITY = 0.6
+PHONE_FORMAT_CHANGE_PROBABILITY = 1.0
+EMAIL_CASE_CHANGE_PROBABILITY = 0.3
+USERNAME_MODIFICATION_PROBABILITY = 0.5
+ADDRESS_FORMAT_CHANGE_PROBABILITY = 0.5
+ID_FORMAT_CHANGE_PROBABILITY = 0.5
+WHITESPACE_CORRUPTION_PROBABILITY = 0.1
+NAME_FIRST_ONLY_PROBABILITY = 0.1
 
+MAX_TEXTS_PER_MINUTE = 20
+RATE_LIMIT_INTERVAL = 60.0 / MAX_TEXTS_PER_MINUTE
 
 load_dotenv()
 
 # Configuration
 API_KEY = os.getenv("OPENROUTER_API_KEY")
-MODEL = "x-ai/grok-4.1-fast:free"
+MODEL = "mistralai/devstral-2512:free"
 DATASET_PATH = "data/default_dataset/train.json"
 OUTPUT_PATH = "data/synthetic_dataset/train.json"
 
@@ -43,6 +46,24 @@ except OSError:
 
 fake = Faker()
 
+class RateLimiter:
+    def __init__(self, interval):
+        self.interval = interval
+        self.last_call = 0
+        self.lock = threading.Lock()
+
+    def wait_for_slot(self):
+        with self.lock:
+            current_time = time.time()
+            elapsed = current_time - self.last_call
+            wait_time = self.interval - elapsed
+            
+            if wait_time > 0:
+                time.sleep(wait_time)
+            
+            self.last_call = time.time()
+
+limiter = RateLimiter(RATE_LIMIT_INTERVAL)
 
 def random_id_num():
     patterns = [
@@ -93,22 +114,40 @@ def generate_prompt(sample_text):
     )
     return prompt
 
-
 def call_llm(prompt):
+    # Enforce global rate limit before calling API
+    limiter.wait_for_slot()
+
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1",
         api_key=API_KEY,
     )
 
-    try:
-        response = client.chat.completions.create(
-            model=MODEL,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        return response.choices[0].message.content
-    except Exception as e:
-        print(f"Error calling LLM: {e}")
-        return None
+    # RETRY LOGIC
+    max_retries = 10
+    base_delay = 2  # Start waiting 2 seconds
+
+    for attempt in range(max_retries):
+        try:
+            response = client.chat.completions.create(
+                model=MODEL,
+                messages=[{"role": "user", "content": prompt}],
+            )
+            return response.choices[0].message.content
+            
+        except Exception as e:
+            # Check if it's a rate limit error (usually 429)
+            if "429" in str(e) or "rate limit" in str(e).lower():
+                wait_time = base_delay * (2 ** attempt) # Exponential backoff: 2, 4, 8, 16...
+                print(f"Rate limit hit. Retrying in {wait_time}s... (Attempt {attempt+1}/{max_retries})")
+                time.sleep(wait_time)
+            else:
+                # If it's a different error (e.g. invalid key), fail immediately
+                print(f"Error calling LLM: {e}")
+                return None
+    
+    print("Max retries exceeded.")
+    return None
 
 
 def corrupt_pii(value, label_type):
@@ -272,7 +311,7 @@ def main():
         "--num_samples", type=int, default=10, help="Number of samples to generate"
     )
     parser.add_argument(
-        "--workers", type=int, default=20, help="Number of parallel workers"
+        "--workers", type=int, default=10, help="Number of parallel workers"
     )
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
     args = parser.parse_args()
@@ -289,6 +328,7 @@ def main():
         return
 
     print(f"Generating {args.num_samples} samples with {args.workers} workers...")
+    print(f"Rate Limit Enforced: {MAX_TEXTS_PER_MINUTE} texts/min ({RATE_LIMIT_INTERVAL}s interval)")
     print(f"Saving results incrementally to {OUTPUT_PATH}...")
 
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)

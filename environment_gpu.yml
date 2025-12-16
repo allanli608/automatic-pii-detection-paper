@@ -44,3 +44,4 @@ dependencies:
     - tqdm
     - openai
     - faker
+    - requests
