@@ -6,7 +6,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(PROJECT_ROOT, "data")
 
 COMPETITION_DATA = os.path.join(DATA_DIR, "default_dataset/train.json") 
-EXTERNAL_DATA = os.path.join(DATA_DIR, "synthetic_dataset/external_data.json")
+EXTERNAL_DATA = os.path.join(DATA_DIR, "synthetic_dataset/train.json")
 
 # Model & Training
 MODEL_NAME = "microsoft/deberta-v3-base"
