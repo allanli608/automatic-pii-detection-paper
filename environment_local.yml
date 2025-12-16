@@ -1,14 +1,15 @@
 name: pii-detection-local
 channels:
-  - pytorch
-  - conda-forge
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/pytorch/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
   - defaults
 dependencies:
   # --- CONDA PACKAGES ---
   - python=3.10
   - ipykernel
   - pytorch
-  - cpuonly # this needs to change if using a GPU
+  - cpuonly
   - numpy
   - pandas
   - matplotlib
@@ -28,4 +29,4 @@ dependencies:
     - seqeval
     - openai
     - faker
-    
+    - gliner
