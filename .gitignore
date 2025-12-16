@@ -6,5 +6,4 @@ output/
 *output.txt
 .env
 __pycache__/
-
-.DS_Store
+.DS_STORE
