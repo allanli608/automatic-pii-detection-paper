@@ -46,6 +46,11 @@ def train_fold(fold):
         fold, config.NUM_FOLDS, config
     )
 
+    # Print Dataset Sizes
+    print(f"Train samples: {len(train_ds)}", flush=True)
+    print(f"Validation samples: {len(val_ds)}", flush=True)
+
+
     # Setup Weights: O-weight comes from config, PII=1.0
     num_labels = len(label2id)
     weights = torch.ones(num_labels)
