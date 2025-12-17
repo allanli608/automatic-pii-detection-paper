@@ -46,11 +46,11 @@ def train_fold(fold):
         fold, config.NUM_FOLDS, config
     )
 
-    # Setup Weights: O=0.05, PII=1.0
+    # Setup Weights: O-weight comes from config, PII=1.0
     num_labels = len(label2id)
     weights = torch.ones(num_labels)
     if "O" in label2id:
-        weights[label2id["O"]] = 0.05
+        weights[label2id["O"]] = getattr(config, "O_WEIGHT", 0.05)
 
     # Model Init
     model = AutoModelForTokenClassification.from_pretrained(
@@ -62,7 +62,7 @@ def train_fold(fold):
     )
 
     training_args = TrainingArguments(
-        output_dir=f"{config.OUTPUT_DIR_BASE}/fold_{fold}",
+        output_dir=f"{config.OUTPUT_DIR_BASE}/{config.RUN_NAME}/fold_{fold}",
         learning_rate=config.LEARNING_RATE,
         per_device_train_batch_size=config.BATCH_SIZE,
         per_device_eval_batch_size=config.BATCH_SIZE,
@@ -96,7 +96,7 @@ def train_fold(fold):
     trainer.train()
 
     # Save artifacts
-    save_path = f"models/model_fold_{fold}"
+    save_path = f"models/{config.RUN_NAME}/model_fold_{fold}"
     trainer.save_model(save_path)
     tokenizer.save_pretrained(save_path)
 
