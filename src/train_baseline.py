@@ -105,6 +105,12 @@ def train_fold(fold):
     trainer.save_model(save_path)
     tokenizer.save_pretrained(save_path)
 
+
+    # Mark fold complete
+    with open(os.path.join(save_path, "DONE"), "w") as f:
+        f.write(f"Fold {fold} completed\n")
+
+
     # Cleanup
     del model, trainer, train_ds, val_ds
     torch.cuda.empty_cache()

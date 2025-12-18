@@ -7,6 +7,12 @@ import numpy as np
 import torch
 import config
 
+## Helpers for logging status. Can move later.
+import time
+import socket
+import traceback
+from datetime import datetime, timezone
+
 from src.train_baseline import train_baseline  # or import train_fold if you prefer
 
 
@@ -90,28 +96,39 @@ def save_run_metadata(overrides: dict):
     with open(os.path.join(out_dir, "run_metadata.json"), "w") as f:
         json.dump(meta, f, indent=2)
 
+## Helpers for logging status. Can move later.
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--variant", required=True,
-                        help="baseline|external_0|external_50|o_010|lr_half|wd_high")
-    parser.add_argument("--run-name", default=None)
-    parser.add_argument("--seed", type=int, default=42)
+def _utc_now_iso():
+    return datetime.now(timezone.utc).isoformat()
 
-    # optional direct knobs
-    parser.add_argument("--external-fraction", type=float, default=None)
-    parser.add_argument("--o-weight", type=float, default=None)
-    parser.add_argument("--lr", type=float, default=None)
-    parser.add_argument("--weight-decay", type=float, default=None)
+def _status_path():
+    out_dir = os.path.join(config.OUTPUT_DIR_BASE, config.RUN_NAME)
+    os.makedirs(out_dir, exist_ok=True)
+    return os.path.join(out_dir, "status.json")
 
-    args = parser.parse_args()
+def read_status():
+    path = _status_path()
+    if os.path.exists(path):
+        with open(path, "r") as f:
+            return json.load(f)
+    return {}
 
-    set_seed(args.seed)
-    overrides = apply_variant(args.variant, args)
-    save_run_metadata(overrides)
+def write_status(status: dict):
+    path = _status_path()
+    tmp = path + ".tmp"
+    with open(tmp, "w") as f:
+        json.dump(status, f, indent=2)
+    os.replace(tmp, path)
 
-    train_baseline(num_folds=config.NUM_FOLDS)
-
-
-if __name__ == "__main__":
-    main()
+def init_status(overrides: dict, args):
+    status = {
+        "run_name": config.RUN_NAME,
+        "variant": getattr(args, "variant", None),
+        "seed": getattr(args, "seed", None),
+        "git_commit": get_git_commit(),
+        "host": socket.gethostname(),
+        "pid": os.getpid(),
+        "start_time_utc": _utc_now_iso(),
+        "end_time_utc": None,
+        "status": "running",   # running|success|failed
+        "overrides": overrides

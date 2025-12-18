@@ -1,3 +1,4 @@
+### DO NOT USE FOR TRAIN, use tsinghua-ml instead
 name: pii-detection-5090-cn
 channels:
   # --- TSINGHUA MIRRORS ---

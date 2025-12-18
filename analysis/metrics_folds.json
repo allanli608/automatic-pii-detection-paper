@@ -1,0 +1,122 @@
+{
+  "generated_at_utc": "2025-12-18T05:57:08.157941+00:00",
+  "rows": [
+    {
+      "variant": "external_0",
+      "fold": "fold_0",
+      "checkpoint": "output/external_0/fold_0/checkpoint-1568",
+      "step": 1568,
+      "status": "ok",
+      "eval_fbeta": 0.9618063896228092,
+      "eval_precision": 0.6305015353121795,
+      "eval_recall": 0.9824561403508756,
+      "eval_loss": 0.002171348314732313
+    },
+    {
+      "variant": "external_0",
+      "fold": "fold_1",
+      "checkpoint": "output/external_0/fold_1/checkpoint-2352",
+      "step": 2352,
+      "status": "ok",
+      "eval_fbeta": 0.9471177266575883,
+      "eval_precision": 0.6409523809523804,
+      "eval_recall": 0.9655667144906729,
+      "eval_loss": 0.002613062271848321
+    },
+    {
+      "variant": "external_0",
+      "fold": "fold_2",
+      "checkpoint": "output/external_0/fold_2/checkpoint-784",
+      "step": 784,
+      "status": "ok",
+      "eval_fbeta": 0.9419113054340246,
+      "eval_precision": 0.4455825864276566,
+      "eval_recall": 0.98583569405099,
+      "eval_loss": 0.004189265426248312
+    },
+    {
+      "variant": "external_0",
+      "fold": "fold_3",
+      "checkpoint": "output/external_0/fold_3/checkpoint-1568",
+      "step": 1568,
+      "status": "ok",
+      "eval_fbeta": 0.9445783132529413,
+      "eval_precision": 0.5068965517241375,
+      "eval_recall": 0.9783693843593994,
+      "eval_loss": 0.0026225405745208263
+    },
+    {
+      "variant": "external_50",
+      "fold": "fold_0",
+      "checkpoint": "output/external_50/fold_0/checkpoint-2352",
+      "step": 2352,
+      "status": "ok",
+      "eval_fbeta": 0.9548286604360761,
+      "eval_precision": 0.602753195673549,
+      "eval_recall": 0.9776714513556602,
+      "eval_loss": 0.002602549036964774
+    },
+    {
+      "variant": "external_50",
+      "fold": "fold_1",
+      "checkpoint": "output/external_50/fold_1/checkpoint-2352",
+      "step": 2352,
+      "status": "ok",
+      "eval_fbeta": 0.9442008984141876,
+      "eval_precision": 0.6378326996197713,
+      "eval_recall": 0.9626972740315625,
+      "eval_loss": 0.0026491230819374323
+    },
+    {
+      "variant": "external_50",
+      "fold": "fold_2",
+      "checkpoint": "output/external_50/fold_2/checkpoint-784",
+      "step": 784,
+      "status": "ok",
+      "eval_fbeta": 0.9415192507803577,
+      "eval_precision": 0.44331210191082776,
+      "eval_recall": 0.98583569405099,
+      "eval_loss": 0.004257692955434322
+    },
+    {
+      "variant": "external_50",
+      "fold": "fold_3",
+      "checkpoint": "output/external_50/fold_3/checkpoint-2352",
+      "step": 2352,
+      "status": "ok",
+      "eval_fbeta": 0.9506041444937738,
+      "eval_precision": 0.616033755274261,
+      "eval_recall": 0.9717138103161381,
+      "eval_loss": 0.0020383773371577263
+    },
+    {
+      "variant": "o_010",
+      "fold": "fold_0",
+      "checkpoint": "output/o_010/fold_0/checkpoint-1568",
+      "step": 1568,
+      "status": "ok",
+      "eval_fbeta": 0.9639514522069382,
+      "eval_precision": 0.6930022573363424,
+      "eval_recall": 0.9792663476873987,
+      "eval_loss": 0.001395875820890069
+    },
+    {
+      "variant": "o_010",
+      "fold": "fold_1",
+      "checkpoint": "output/o_010/fold_1/checkpoint-1568",
+      "step": 1568,
+      "status": "ok",
+      "eval_fbeta": 0.9371534195932925,
+      "eval_precision": 0.6842105263157887,
+      "eval_recall": 0.9512195121951206,
+      "eval_loss": 0.0019221914699301124
+    },
+    {
+      "variant": "o_010",
+      "fold": "fold_2",
+      "checkpoint": "output/o_010/fold_2/checkpoint-1568",
+      "step": 1568,
+      "status": "missing_trainer_state"
+    }
+  ]
+}
