@@ -131,4 +131,39 @@ def init_status(overrides: dict, args):
         "start_time_utc": _utc_now_iso(),
         "end_time_utc": None,
         "status": "running",   # running|success|failed
-        "overrides": overrides
+        "overrides": overrides,
+        "folds": {},           # filled as folds run
+        "error": None,         # filled on failure
+    }
+    write_status(status)
+    return status
+
+def update_fold_status(fold: int, fold_status: str, extra: dict | None = None):
+    status = read_status()
+    status.setdefault("folds", {})
+    entry = status["folds"].get(str(fold), {})
+    entry.update({
+        "status": fold_status,   # running|success|failed
+        "updated_time_utc": _utc_now_iso(),
+    })
+    if extra:
+        entry.update(extra)
+    status["folds"][str(fold)] = entry
+    write_status(status)
+
+def finalize_status_success():
+    status = read_status()
+    status["status"] = "success"
+    status["end_time_utc"] = _utc_now_iso()
+    write_status(status)
+
+def finalize_status_failure(exc: BaseException):
+    status = read_status()
+    status["status"] = "failed"
+    status["end_time_utc"] = _utc_now_iso()
+    status["error"] = {
+        "type": type(exc).__name__,
+        "message": str(exc),
+        "traceback": traceback.format_exc(),
+    }
+    write_status(status)
