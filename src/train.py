@@ -167,3 +167,40 @@ def finalize_status_failure(exc: BaseException):
         "traceback": traceback.format_exc(),
     }
     write_status(status)
+
+def main(): 
+    parser = argparse.ArgumentParser() parser.add_argument("--variant", required=True, help="baseline|external_0|external_50|o_010|lr_half|wd_high") parser.add_argument("--run-name", default=None) parser.add_argument("--seed", type=int, default=42) # optional direct knobs parser.add_argument("--external-fraction", type=float, default=None) parser.add_argument("--o-weight", type=float, default=None) parser.add_argument("--lr", type=float, default=None) parser.add_argument("--weight-decay", type=float, default=None) args = parser.parse_args() set_seed(args.seed) overrides = apply_variant(args.variant, args) save_run_metadata(overrides) train_baseline(num_folds=config.NUM_FOLDS) if __name__ == "__main__": main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--variant", required=True, help="baseline|external_0|external_50|o_010|lr_half|wd_high")
+    parser.add_argument("--run-name", default=None)
+    parser.add_argument("--seed", type=int, default=42)
+    # optional direct knobs
+    parser.add_argument("--external-fraction", type=float, default=None)
+    parser.add_argument("--o-weight", type=float, default=None)
+    parser.add_argument("--lr", type=float, default=None)
+    parser.add_argument("--weight-decay", type=float, default=None)
+    
+    args = parser.parse_args()
+    
+    set_seed(args.seed)
+    overrides = apply_variant(args.variant, args)
+    save_run_metadata(overrides)
+
+    train_baseline(num_folds=config.NUM_FOLDS)
+
+    init_status(overrides, args)
+
+    try:
+        train_baseline(num_folds=config.NUM_FOLDS)
+        finalize_status_success()
+        
+        # mark entire variant complete
+        with open(f"models/{config.RUN_NAME}/DONE", "w") as f:
+            f.write("Done variant\n")
+
+    except Exception as e:
+        finalize_status_failure(e)
+        raise
+
+if __name__ == "__main__":
+    main()
