@@ -1,3 +1,5 @@
+## Analyzes model training outputs and summarizes evaluation metrics across variants and folds.
+
 #!/usr/bin/env python3
 import argparse, json, os, glob, re, math, statistics as stats
 from datetime import datetime, timezone

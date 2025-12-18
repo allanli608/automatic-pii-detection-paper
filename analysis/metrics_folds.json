@@ -1,6 +1,50 @@
 {
-  "generated_at_utc": "2025-12-18T05:57:08.157941+00:00",
+  "generated_at_utc": "2025-12-18T06:02:49.578277+00:00",
   "rows": [
+    {
+      "variant": "baseline",
+      "fold": "fold_0",
+      "checkpoint": "output/baseline/fold_0/checkpoint-2352",
+      "step": 2352,
+      "status": "ok",
+      "eval_fbeta": 0.9546740504423679,
+      "eval_precision": 0.6503198294243063,
+      "eval_recall": 0.972886762360445,
+      "eval_loss": 0.002438435796648264
+    },
+    {
+      "variant": "baseline",
+      "fold": "fold_1",
+      "checkpoint": "output/baseline/fold_1/checkpoint-1568",
+      "step": 1568,
+      "status": "ok",
+      "eval_fbeta": 0.9498486813661328,
+      "eval_precision": 0.626506024096385,
+      "eval_recall": 0.9698708751793386,
+      "eval_loss": 0.0025745707098394632
+    },
+    {
+      "variant": "baseline",
+      "fold": "fold_2",
+      "checkpoint": "output/baseline/fold_2/checkpoint-784",
+      "step": 784,
+      "status": "ok",
+      "eval_fbeta": 0.9446648569637989,
+      "eval_precision": 0.46215139442231046,
+      "eval_recall": 0.98583569405099,
+      "eval_loss": 0.0037574125453829765
+    },
+    {
+      "variant": "baseline",
+      "fold": "fold_3",
+      "checkpoint": "output/baseline/fold_3/checkpoint-2352",
+      "step": 2352,
+      "status": "ok",
+      "eval_fbeta": 0.9465782559739171,
+      "eval_precision": 0.6056191467221638,
+      "eval_recall": 0.9683860232945075,
+      "eval_loss": 0.002115315990522504
+    },
     {
       "variant": "external_0",
       "fold": "fold_0",
