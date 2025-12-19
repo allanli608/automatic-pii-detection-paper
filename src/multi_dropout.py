@@ -40,14 +40,42 @@ class MultiDropoutTokenClassifier(nn.Module):
         super().__init__()
 
         # store core components
+        self.backbone = backbone
+        self.config = config
+        self.num_labels = num_labels
 
+        # multi-dropout parameters
+        self.k = k
+        self.dropout = nn.Dropout(dropout_p)
 
-# class MultiSampleDropoutTokenClassifier(nn.Module):
+        # classification head
+        self.classifier = nn.Linear(config.hidden_size, num_labels)
 
-#     def __init__(self, base_model, num_labels, k=5, p=0.2): ## K dropout samples, dropout prob p
-#         ...
-#     def forward(...):
-#         H = base_model(...).last_hidden_state
-#         logits = mean( classifier(dropout_i(H)) for i in 1..k )
-#         return TokenClassifierOutput(logits=logits, ...)
+    @classmethod
+    def from_pretrained(
+        cls,
+        model_name_or_path: str,
+        num_labels: int,
+        id2label: Optional[Dict[int, str]] = None,
+        label2id: Optional[Dict[str, int]] = None,
+        k: int = 5,
+        dropout_p: float = 0.2,
+        **kwargs,
+    ):
+        """
+        Factory method to construct the model from a pretrained HF checkpoint.
+        """
+        raise NotImplementedError("from_pretrained not implemented yet")
 
+    def forward(
+        self,
+        input_ids: Optional[torch.Tensor] = None,
+        attention_mask: Optional[torch.Tensor] = None,
+        token_type_ids: Optional[torch.Tensor] = None,
+        labels: Optional[torch.Tensor] = None,
+        **kwargs: Any,
+    ) -> TokenClassifierOutput:
+        """
+        Forward pass. To be implemented.
+        """
+        raise NotImplementedError("forward not implemented yet")
