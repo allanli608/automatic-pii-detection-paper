@@ -46,3 +46,6 @@ dependencies:
     - openai
     - faker
     - requests
+
+    # allan metaclassifiers
+    - xgboost
