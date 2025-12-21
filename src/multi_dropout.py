@@ -153,6 +153,25 @@ class MultiDropoutTokenClassifier(nn.Module):
         }
         (save_dir / "wrapper_meta.json").write_text(json.dumps(meta, indent=2))
 
+    # For compatibility with Trainer API
+    # Trainer calls the method on the wrapper, and the wrapper forwards it to the actual HF backbone (which does support it).
+    def gradient_checkpointing_enable(self, gradient_checkpointing_kwargs=None):
+        if hasattr(self.backbone, "gradient_checkpointing_enable"):
+            return self.backbone.gradient_checkpointing_enable(
+                gradient_checkpointing_kwargs=gradient_checkpointing_kwargs
+            )
+        # fallback: try generic attribute used by some models
+        if hasattr(self.backbone, "gradient_checkpointing"):
+            self.backbone.gradient_checkpointing = True
+            return
+        raise AttributeError("Backbone does not support gradient checkpointing.")
+
+    def gradient_checkpointing_disable(self):
+        if hasattr(self.backbone, "gradient_checkpointing_disable"):
+            return self.backbone.gradient_checkpointing_disable()
+        if hasattr(self.backbone, "gradient_checkpointing"):
+            self.backbone.gradient_checkpointing = False
+            return
 
 
     def forward(
