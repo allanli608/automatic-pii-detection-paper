@@ -19,6 +19,11 @@ LEARNING_RATE = 2e-5
 WARMUP_RATIO = 0.1
 WEIGHT_DECAY = 0.01
 
+# multi-dropout (off by default)
+MD_K = 1      # 1 = disabled (single pass)
+MD_P = 0.2    # dropout prob used in the multi-dropout head
+
+
 NUM_WORKERS = 4
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 FP16 = True

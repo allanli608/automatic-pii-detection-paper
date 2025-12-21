@@ -1,5 +1,6 @@
 import os
 import sys
+from src.multi_dropout import MultiDropoutTokenClassifier
 import torch
 import torch.nn as nn
 from functools import partial
@@ -57,15 +58,27 @@ def train_fold(fold):
     if "O" in label2id:
         weights[label2id["O"]] = getattr(config, "O_WEIGHT", 0.05)
 
-    # Model Init
-    model = AutoModelForTokenClassification.from_pretrained(
-        config.MODEL_NAME,
-        num_labels=num_labels,
-        id2label=id2label,
-        label2id=label2id,
-        use_safetensors=True,
-    )
+    # Model Selection: Multi-Dropout if MD_K > 1
+    if getattr(config, "MD_K", 1) > 1:
+        model = MultiDropoutTokenClassifier.from_pretrained(
+            config.MODEL_NAME,
+            num_labels=num_labels,
+            id2label=id2label,
+            label2id=label2id,
+            use_safetensors=True,
+        )
 
+    else:
+        model = AutoModelForTokenClassification.from_pretrained(
+            config.MODEL_NAME,
+            num_labels=num_labels,
+            id2label=id2label,
+            label2id=label2id,
+            use_safetensors=True,
+        )
+
+    # Model Init
+    
     training_args = TrainingArguments(
         output_dir=f"{config.OUTPUT_DIR_BASE}/{config.RUN_NAME}/fold_{fold}",
         learning_rate=config.LEARNING_RATE,
@@ -103,6 +116,7 @@ def train_fold(fold):
     # Save artifacts
     save_path = f"models/{config.RUN_NAME}/model_fold_{fold}"
     trainer.save_model(save_path)
+    model.save_pretrained(save_path)
     tokenizer.save_pretrained(save_path)
 
 

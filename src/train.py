@@ -1,3 +1,7 @@
+"""
+Calls on train_baseline.py, substituting different config parameters based on the variant name.
+Also handles logging of run status and metadata.
+"""
 import argparse
 import os
 import json
@@ -44,6 +48,10 @@ def apply_variant(variant: str, args):
         "O_WEIGHT": 0.05,
         "LEARNING_RATE": config.LEARNING_RATE,
         "WEIGHT_DECAY": config.WEIGHT_DECAY,
+
+        # multi-dropout defaults
+        "MD_K": getattr(config, "MD_K", 1),
+        "MD_P": getattr(config, "MD_P", 0.2),
     }
 
     if variant == "baseline":
@@ -63,6 +71,10 @@ def apply_variant(variant: str, args):
     elif variant == "wd_high":
         overrides["RUN_NAME"] = "wd_high"
         overrides["WEIGHT_DECAY"] = max(config.WEIGHT_DECAY * 2, config.WEIGHT_DECAY + 0.01)
+    elif variant == "md":
+        overrides["RUN_NAME"] = "md"
+        overrides["MD_K"] = 5 ## By default, use 5-dropout
+
     else:
         raise ValueError(f"Unknown variant: {variant}")
 
@@ -169,7 +181,6 @@ def finalize_status_failure(exc: BaseException):
     write_status(status)
 
 def main(): 
-    parser = argparse.ArgumentParser() parser.add_argument("--variant", required=True, help="baseline|external_0|external_50|o_010|lr_half|wd_high") parser.add_argument("--run-name", default=None) parser.add_argument("--seed", type=int, default=42) # optional direct knobs parser.add_argument("--external-fraction", type=float, default=None) parser.add_argument("--o-weight", type=float, default=None) parser.add_argument("--lr", type=float, default=None) parser.add_argument("--weight-decay", type=float, default=None) args = parser.parse_args() set_seed(args.seed) overrides = apply_variant(args.variant, args) save_run_metadata(overrides) train_baseline(num_folds=config.NUM_FOLDS) if __name__ == "__main__": main()
     parser = argparse.ArgumentParser()
     parser.add_argument("--variant", required=True, help="baseline|external_0|external_50|o_010|lr_half|wd_high")
     parser.add_argument("--run-name", default=None)
