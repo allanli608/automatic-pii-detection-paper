@@ -1,0 +1,19 @@
+variants:
+  baseline:
+    weight_mode: uniform
+    model_mode: baseline
+
+  o_weight:
+    weight_mode: o_weight
+    model_mode: baseline
+    o_weight: 0.05
+
+  dynamic:
+    weight_mode: dynamic
+    model_mode: baseline
+
+  md:
+    weight_mode: uniform
+    model_mode: multi_dropout
+    md_k: 5
+    md_p: 0.2

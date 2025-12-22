@@ -1,29 +1,54 @@
-import os
+"""Legacy config shim to load config/base.py and config/gpu_5090.py."""
+
+from __future__ import annotations
+
+from pathlib import Path
+from types import SimpleNamespace
+from typing import Dict, Optional
+
+import runpy
 import torch
 
-# Paths
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(PROJECT_ROOT, "data")
-
-COMPETITION_DATA = os.path.join(DATA_DIR, "default_dataset/train.json") 
-EXTERNAL_DATA = os.path.join(DATA_DIR, "synthetic_dataset/train_clean.json")
-
-# Model & Training
-MODEL_NAME = "microsoft/deberta-v3-base"
-OUTPUT_DIR_BASE = "output"
-
-NUM_FOLDS = 4
-BATCH_SIZE = 32
-NUM_EPOCHS = 3
-LEARNING_RATE = 2e-5
-WARMUP_RATIO = 0.1
-WEIGHT_DECAY = 0.01
-
-# multi-dropout (off by default)
-MD_K = 1      # 1 = disabled (single pass)
-MD_P = 0.2    # dropout prob used in the multi-dropout head
+_CONFIG_DIR = Path(__file__).resolve().parent / "config"
 
 
-NUM_WORKERS = 4
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-FP16 = True
+def _load_module_dict(path: Path) -> Dict[str, object]:
+    data = runpy.run_path(str(path))
+    return {k: v for k, v in data.items() if k.isupper()}
+
+
+def _ensure_bf16_support(cfg: SimpleNamespace) -> None:
+    if getattr(cfg, "BF16", False):
+        if not torch.cuda.is_available() or not torch.cuda.is_bf16_supported():
+            cfg.BF16 = False
+            if not getattr(cfg, "FP16", False):
+                cfg.FP16 = True
+
+
+def load_config(
+    base_path: Optional[Path] = None,
+    override_path: Optional[Path] = None,
+    extra: Optional[Dict[str, object]] = None,
+) -> SimpleNamespace:
+    """Load config values from base and override files."""
+    base_path = base_path or (_CONFIG_DIR / "base.py")
+    override_path = override_path or (_CONFIG_DIR / "gpu_5090.py")
+
+    base = _load_module_dict(base_path)
+    overrides = _load_module_dict(override_path) if override_path else {}
+
+    data = {**base, **overrides}
+    if extra:
+        data.update(extra)
+
+    cfg = SimpleNamespace(**data)
+    _ensure_bf16_support(cfg)
+    return cfg
+
+
+# Load defaults into module namespace for backwards compatibility
+_default = load_config()
+for _key, _value in _default.__dict__.items():
+    globals()[_key] = _value
+
+__all__ = ["load_config"] + [k for k in globals() if k.isupper()]
