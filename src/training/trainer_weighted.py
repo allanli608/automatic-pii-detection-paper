@@ -19,10 +19,22 @@ class WeightedTrainer(Trainer):
 
     def compute_loss(self, model, inputs, return_outputs=False, **kwargs):
         labels = inputs.get("labels")
-        outputs = model(**inputs)
+        
+        # To avoid "backward through the graph a second time" with gradient checkpointing,
+        # we don't pass labels to the model if we're going to compute the loss ourselves.
+        if labels is not None:
+            model_inputs = {k: v for k, v in inputs.items() if k != "labels"}
+            outputs = model(**model_inputs)
+        else:
+            outputs = model(**inputs)
+
         logits = outputs.get("logits")
 
-        loss_fct = nn.CrossEntropyLoss(weight=self.class_weights, ignore_index=self.ignore_index)
-        loss = loss_fct(logits.view(-1, self.model.config.num_labels), labels.view(-1))
+        if labels is not None:
+            loss_fct = nn.CrossEntropyLoss(weight=self.class_weights, ignore_index=self.ignore_index)
+            loss = loss_fct(logits.view(-1, self.model.config.num_labels), labels.view(-1))
+        else:
+            # Fallback for cases where labels are not provided (e.g. some eval paths)
+            loss = outputs.get("loss")
 
         return (loss, outputs) if return_outputs else loss

@@ -12,7 +12,6 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from src.training.variants import load_variants
 
-
 def _project_root() -> Path:
     return PROJECT_ROOT
 

@@ -1,0 +1,24 @@
+{
+  "run_name": "baseline",
+  "variant": "baseline",
+  "seed": null,
+  "git_commit": "7a06734fa355b289e3b2b491daea65f867b4a709",
+  "host": "autodl-container-1e0644ba61-b7f81811",
+  "pid": 21276,
+  "start_time_utc": "2025-12-24T14:35:30.319821+00:00",
+  "end_time_utc": null,
+  "status": "running",
+  "overrides": {
+    "RUN_NAME": "baseline",
+    "SEED": 42,
+    "WEIGHT_MODE": "uniform",
+    "MODEL_MODE": "baseline"
+  },
+  "folds": {
+    "0": {
+      "status": "running",
+      "updated_time_utc": "2025-12-24T14:35:30.320070+00:00"
+    }
+  },
+  "error": null
+}

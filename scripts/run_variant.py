@@ -48,6 +48,21 @@ def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+def _json_default(obj: Any):
+    if isinstance(obj, Path):
+        return str(obj)
+    raise TypeError(f"Object of type {obj.__class__.__name__} is not JSON serializable")
+
+
+def _configure_hf_mirror() -> None:
+    if not os.environ.get("HF_ENDPOINT"):
+        os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
+    if not os.environ.get("HF_HUB_DISABLE_XET"):
+        os.environ["HF_HUB_DISABLE_XET"] = "1"
+    if not os.environ.get("HF_HUB_ENABLE_HF_TRANSFER"):
+        os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0"
+
+
 def _status_path(run_name: str, output_dir_base: str) -> Path:
     out_dir = Path(output_dir_base) / run_name
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -157,7 +172,7 @@ def save_run_metadata(config, variant_spec, overrides: Dict[str, Any]) -> None:
         "overrides": overrides,
         "config": {k: getattr(config, k) for k in dir(config) if k.isupper()},
     }
-    (out_dir / "run_metadata.json").write_text(json.dumps(meta, indent=2))
+    (out_dir / "run_metadata.json").write_text(json.dumps(meta, indent=2, default=_json_default))
 
 
 def main() -> None:
@@ -169,6 +184,8 @@ def main() -> None:
     args = parser.parse_args()
 
     os.chdir(_project_root())
+
+    _configure_hf_mirror()
 
     config = load_config()
     variants_file = Path(args.variants_file)

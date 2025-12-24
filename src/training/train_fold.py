@@ -82,6 +82,7 @@ def _build_training_args(config, output_dir: Path, train_len: int) -> TrainingAr
         "fp16": config.FP16,
         "bf16": config.BF16,
         "gradient_checkpointing": config.GRADIENT_CHECKPOINTING,
+        "gradient_checkpointing_kwargs": None,
         "max_grad_norm": config.MAX_GRAD_NORM,
         "eval_accumulation_steps": config.EVAL_ACCUMULATION_STEPS,
         "load_best_model_at_end": config.SAVE_BEST_ONLY,
@@ -99,6 +100,12 @@ def _build_training_args(config, output_dir: Path, train_len: int) -> TrainingAr
 
     if getattr(config, "TORCH_COMPILE", False):
         args_kwargs["torch_compile"] = True
+
+    if config.GRADIENT_CHECKPOINTING:
+        gc_kwargs = getattr(config, "GRADIENT_CHECKPOINTING_KWARGS", None)
+        args_kwargs["gradient_checkpointing_kwargs"] = gc_kwargs or {"use_reentrant": False}
+    else:
+        args_kwargs.pop("gradient_checkpointing_kwargs", None)
 
     if getattr(config, "SAVE_ONLY_MODEL", True):
         args_kwargs["save_only_model"] = True
