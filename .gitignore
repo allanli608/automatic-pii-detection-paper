@@ -3,6 +3,7 @@ data/
 !src/data/
 .history/
 models/
+!src/models/
 output/
 *output.txt
 .env
