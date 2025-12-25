@@ -183,6 +183,7 @@ def main() -> None:
     parser.add_argument("--variants-file", default="config/variants.yaml")
     args = parser.parse_args()
 
+
     os.chdir(_project_root())
 
     _configure_hf_mirror()
@@ -199,6 +200,12 @@ def main() -> None:
     variant_spec = variants[args.variant]
     run_name = args.run_name or variant_spec.name
     seed = args.seed if args.seed is not None else config.SEED
+
+    # Check if already done
+    status = read_status(run_name, config.OUTPUT_DIR_BASE)
+    if status.get("status") == "success":
+        print(f"Variant '{run_name}' already completed successfully. Skipping.")
+        return
 
     overrides = apply_variant(config, variant_spec, run_name=run_name, seed=seed)
 
