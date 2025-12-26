@@ -1,0 +1,78 @@
+{
+  "folds": {
+    "0": {
+      "eval_loss": 0.008214183151721954,
+      "eval_fbeta": 0.9381286549706793,
+      "eval_precision": 0.4329824561403506,
+      "eval_recall": 0.9840510366826141,
+      "eval_runtime": 17.3863,
+      "eval_samples_per_second": 97.663,
+      "eval_steps_per_second": 1.553,
+      "epoch": 3.0
+    },
+    "1": {
+      "eval_loss": 0.005808809772133827,
+      "eval_fbeta": 0.9450793650792887,
+      "eval_precision": 0.4657627118644065,
+      "eval_recall": 0.9856527977044461,
+      "eval_runtime": 17.6119,
+      "eval_samples_per_second": 97.321,
+      "eval_steps_per_second": 1.533,
+      "epoch": 3.0
+    },
+    "2": {
+      "eval_loss": 0.005857297219336033,
+      "eval_fbeta": 0.9474622483220745,
+      "eval_precision": 0.4887482419127986,
+      "eval_recall": 0.9844192634560892,
+      "eval_runtime": 17.6825,
+      "eval_samples_per_second": 95.518,
+      "eval_steps_per_second": 1.527,
+      "epoch": 3.0
+    },
+    "3": {
+      "eval_loss": 0.004206647630780935,
+      "eval_fbeta": 0.9506369426750813,
+      "eval_precision": 0.45817344589409026,
+      "eval_recall": 0.9933444259567371,
+      "eval_runtime": 17.7565,
+      "eval_samples_per_second": 96.077,
+      "eval_steps_per_second": 1.521,
+      "epoch": 3.0
+    }
+  },
+  "summary": {
+    "eval_precision": {
+      "mean": 0.4614167139529115,
+      "std": 0.019905564068378973
+    },
+    "eval_samples_per_second": {
+      "mean": 96.64474999999999,
+      "std": 0.8783582341505075
+    },
+    "eval_fbeta": {
+      "mean": 0.9453268027617809,
+      "std": 0.004599789959037824
+    },
+    "eval_loss": {
+      "mean": 0.006021734443493187,
+      "std": 0.0014294883693351543
+    },
+    "epoch": {
+      "mean": 3.0,
+      "std": 0.0
+    },
+    "eval_steps_per_second": {
+      "mean": 1.5334999999999999,
+      "std": 0.012031209415515975
+    },
+    "eval_recall": {
+      "mean": 0.9868668809499717,
+      "std": 0.0037865682938548664
+    },
+    "eval_runtime": {
+      "mean": 17.6093,
+      "std": 0.13852963581847794
+    }
+  }
+}

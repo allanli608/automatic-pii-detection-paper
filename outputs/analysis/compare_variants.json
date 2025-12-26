@@ -1,0 +1,38 @@
+[
+  {
+    "run_name": "baseline",
+    "metric": "fbeta",
+    "mean": null,
+    "std": null
+  },
+  {
+    "run_name": "dynamic",
+    "metric": "fbeta",
+    "mean": null,
+    "std": null
+  },
+  {
+    "run_name": "md",
+    "metric": "fbeta",
+    "mean": null,
+    "std": null
+  },
+  {
+    "run_name": "md_dynamic",
+    "metric": "fbeta",
+    "mean": null,
+    "std": null
+  },
+  {
+    "run_name": "md_o_weight",
+    "metric": "fbeta",
+    "mean": null,
+    "std": null
+  },
+  {
+    "run_name": "o_weight",
+    "metric": "fbeta",
+    "mean": null,
+    "std": null
+  }
+]

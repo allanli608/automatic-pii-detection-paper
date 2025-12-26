@@ -1,0 +1,76 @@
+{
+  "run_name": "dynamic",
+  "variant": "dynamic",
+  "seed": null,
+  "git_commit": "9361f244537f1aa6b92841e8b41f0c1e1c63277c",
+  "host": "autodl-container-1e0644ba61-b7f81811",
+  "pid": 15592,
+  "start_time_utc": "2025-12-25T05:20:30.910788+00:00",
+  "end_time_utc": "2025-12-25T08:35:28.156144+00:00",
+  "status": "success",
+  "overrides": {
+    "RUN_NAME": "dynamic",
+    "SEED": 42,
+    "WEIGHT_MODE": "dynamic",
+    "MODEL_MODE": "baseline"
+  },
+  "folds": {
+    "0": {
+      "status": "success",
+      "updated_time_utc": "2025-12-25T06:09:11.010447+00:00",
+      "metrics": {
+        "eval_loss": 0.008214183151721954,
+        "eval_fbeta": 0.9381286549706793,
+        "eval_precision": 0.4329824561403506,
+        "eval_recall": 0.9840510366826141,
+        "eval_runtime": 17.3863,
+        "eval_samples_per_second": 97.663,
+        "eval_steps_per_second": 1.553,
+        "epoch": 3.0
+      }
+    },
+    "1": {
+      "status": "success",
+      "updated_time_utc": "2025-12-25T06:57:51.880379+00:00",
+      "metrics": {
+        "eval_loss": 0.005808809772133827,
+        "eval_fbeta": 0.9450793650792887,
+        "eval_precision": 0.4657627118644065,
+        "eval_recall": 0.9856527977044461,
+        "eval_runtime": 17.6119,
+        "eval_samples_per_second": 97.321,
+        "eval_steps_per_second": 1.533,
+        "epoch": 3.0
+      }
+    },
+    "2": {
+      "status": "success",
+      "updated_time_utc": "2025-12-25T07:46:37.089354+00:00",
+      "metrics": {
+        "eval_loss": 0.005857297219336033,
+        "eval_fbeta": 0.9474622483220745,
+        "eval_precision": 0.4887482419127986,
+        "eval_recall": 0.9844192634560892,
+        "eval_runtime": 17.6825,
+        "eval_samples_per_second": 95.518,
+        "eval_steps_per_second": 1.527,
+        "epoch": 3.0
+      }
+    },
+    "3": {
+      "status": "success",
+      "updated_time_utc": "2025-12-25T08:35:27.149287+00:00",
+      "metrics": {
+        "eval_loss": 0.004206647630780935,
+        "eval_fbeta": 0.9506369426750813,
+        "eval_precision": 0.45817344589409026,
+        "eval_recall": 0.9933444259567371,
+        "eval_runtime": 17.7565,
+        "eval_samples_per_second": 96.077,
+        "eval_steps_per_second": 1.521,
+        "epoch": 3.0
+      }
+    }
+  },
+  "error": null
+}

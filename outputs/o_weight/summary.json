@@ -1,0 +1,78 @@
+{
+  "folds": {
+    "0": {
+      "eval_loss": 0.0030489389318972826,
+      "eval_fbeta": 0.9473120200035058,
+      "eval_precision": 0.545454545454545,
+      "eval_recall": 0.9760765550239219,
+      "eval_runtime": 17.5002,
+      "eval_samples_per_second": 97.028,
+      "eval_steps_per_second": 1.543,
+      "epoch": 3.0
+    },
+    "1": {
+      "eval_loss": 0.002847209805622697,
+      "eval_fbeta": 0.9551820728290704,
+      "eval_precision": 0.5987708516242313,
+      "eval_recall": 0.97847919655667,
+      "eval_runtime": 17.6522,
+      "eval_samples_per_second": 97.098,
+      "eval_steps_per_second": 1.53,
+      "epoch": 3.0
+    },
+    "2": {
+      "eval_loss": 0.003216080367565155,
+      "eval_fbeta": 0.9468517443394056,
+      "eval_precision": 0.5319969159599071,
+      "eval_recall": 0.977337110481585,
+      "eval_runtime": 17.4172,
+      "eval_samples_per_second": 96.973,
+      "eval_steps_per_second": 1.55,
+      "epoch": 3.0
+    },
+    "3": {
+      "eval_loss": 0.002269202144816518,
+      "eval_fbeta": 0.943889027743003,
+      "eval_precision": 0.5934627170582221,
+      "eval_recall": 0.9667221297836922,
+      "eval_runtime": 17.5947,
+      "eval_samples_per_second": 96.961,
+      "eval_steps_per_second": 1.535,
+      "epoch": 3.0
+    }
+  },
+  "summary": {
+    "eval_fbeta": {
+      "mean": 0.9483087162287462,
+      "std": 0.004180097119624405
+    },
+    "eval_precision": {
+      "mean": 0.5674212575242263,
+      "std": 0.02914779185167225
+    },
+    "eval_recall": {
+      "mean": 0.9746537479614673,
+      "std": 0.004657505722591598
+    },
+    "eval_steps_per_second": {
+      "mean": 1.5395,
+      "std": 0.007632168761236885
+    },
+    "eval_runtime": {
+      "mean": 17.541075,
+      "std": 0.08977776381153608
+    },
+    "eval_samples_per_second": {
+      "mean": 97.015,
+      "std": 0.05417102546564959
+    },
+    "epoch": {
+      "mean": 3.0,
+      "std": 0.0
+    },
+    "eval_loss": {
+      "mean": 0.002845357812475413,
+      "std": 0.00035736510332271297
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "folds": {
+    "0": {
+      "eval_loss": 0.0029235174879431725,
+      "eval_fbeta": 0.9373725254948414,
+      "eval_precision": 0.604020100502512,
+      "eval_recall": 0.9585326953747991,
+      "eval_runtime": 17.4313,
+      "eval_samples_per_second": 97.411,
+      "eval_steps_per_second": 1.549,
+      "epoch": 3.0
+    },
+    "1": {
+      "eval_loss": 0.0023320973850786686,
+      "eval_fbeta": 0.9549713551426224,
+      "eval_precision": 0.5479233226837057,
+      "eval_recall": 0.984218077474891,
+      "eval_runtime": 17.7093,
+      "eval_samples_per_second": 96.785,
+      "eval_steps_per_second": 1.525,
+      "epoch": 3.0
+    },
+    "2": {
+      "eval_loss": 0.0033959210850298405,
+      "eval_fbeta": 0.9376870176911454,
+      "eval_precision": 0.4910650464617581,
+      "eval_recall": 0.9730878186968824,
+      "eval_runtime": 17.4049,
+      "eval_samples_per_second": 97.042,
+      "eval_steps_per_second": 1.551,
+      "epoch": 3.0
+    },
+    "3": {
+      "eval_loss": 0.0024039801210165024,
+      "eval_fbeta": 0.946960704691636,
+      "eval_precision": 0.5936863543788181,
+      "eval_recall": 0.9700499168053228,
+      "eval_runtime": 17.6326,
+      "eval_samples_per_second": 96.753,
+      "eval_steps_per_second": 1.531,
+      "epoch": 3.0
+    }
+  },
+  "summary": {
+    "eval_recall": {
+      "mean": 0.9714721270879738,
+      "std": 0.009144961533391498
+    },
+    "eval_steps_per_second": {
+      "mean": 1.539,
+      "std": 0.011224972160321834
+    },
+    "eval_runtime": {
+      "mean": 17.544525,
+      "std": 0.12963703897806292
+    },
+    "eval_precision": {
+      "mean": 0.5591737060066985,
+      "std": 0.04463093833557216
+    },
+    "eval_fbeta": {
+      "mean": 0.9442479007550613,
+      "std": 0.0072915662026004704
+    },
+    "eval_loss": {
+      "mean": 0.002763879019767046,
+      "std": 0.0004303847726625851
+    },
+    "eval_samples_per_second": {
+      "mean": 96.99775,
+      "std": 0.2635805142646183
+    },
+    "epoch": {
+      "mean": 3.0,
+      "std": 0.0
+    }
+  }
+}

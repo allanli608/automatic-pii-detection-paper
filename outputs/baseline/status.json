@@ -2,12 +2,12 @@
   "run_name": "baseline",
   "variant": "baseline",
   "seed": null,
-  "git_commit": "7a06734fa355b289e3b2b491daea65f867b4a709",
+  "git_commit": "dbc79304c5ce3b1696c3cebf1236765a08f942de",
   "host": "autodl-container-1e0644ba61-b7f81811",
-  "pid": 21276,
-  "start_time_utc": "2025-12-24T14:35:30.319821+00:00",
-  "end_time_utc": null,
-  "status": "running",
+  "pid": 34391,
+  "start_time_utc": "2025-12-24T15:00:52.082928+00:00",
+  "end_time_utc": "2025-12-24T18:10:12.009794+00:00",
+  "status": "success",
   "overrides": {
     "RUN_NAME": "baseline",
     "SEED": 42,
@@ -16,8 +16,60 @@
   },
   "folds": {
     "0": {
-      "status": "running",
-      "updated_time_utc": "2025-12-24T14:35:30.320070+00:00"
+      "status": "success",
+      "updated_time_utc": "2025-12-24T15:48:12.152337+00:00",
+      "metrics": {
+        "eval_loss": 0.000763752672355622,
+        "eval_fbeta": 0.9130012150667801,
+        "eval_precision": 0.7363057324840755,
+        "eval_recall": 0.921850079744815,
+        "eval_runtime": 17.5742,
+        "eval_samples_per_second": 96.619,
+        "eval_steps_per_second": 1.536,
+        "epoch": 3.0
+      }
+    },
+    "1": {
+      "status": "success",
+      "updated_time_utc": "2025-12-24T16:35:31.839702+00:00",
+      "metrics": {
+        "eval_loss": 0.0007780948653817177,
+        "eval_fbeta": 0.881065964796796,
+        "eval_precision": 0.7610837438423635,
+        "eval_recall": 0.886657101865135,
+        "eval_runtime": 17.8477,
+        "eval_samples_per_second": 96.035,
+        "eval_steps_per_second": 1.513,
+        "epoch": 3.0
+      }
+    },
+    "2": {
+      "status": "success",
+      "updated_time_utc": "2025-12-24T17:22:50.538223+00:00",
+      "metrics": {
+        "eval_loss": 0.001010482432320714,
+        "eval_fbeta": 0.8201892744479083,
+        "eval_precision": 0.7880434782608685,
+        "eval_recall": 0.8215297450424918,
+        "eval_runtime": 17.5032,
+        "eval_samples_per_second": 96.496,
+        "eval_steps_per_second": 1.543,
+        "epoch": 3.0
+      }
+    },
+    "3": {
+      "status": "success",
+      "updated_time_utc": "2025-12-24T18:10:10.635134+00:00",
+      "metrics": {
+        "eval_loss": 0.0008036271901801229,
+        "eval_fbeta": 0.9258160237388202,
+        "eval_precision": 0.692874692874692,
+        "eval_recall": 0.938435940099832,
+        "eval_runtime": 17.772,
+        "eval_samples_per_second": 95.994,
+        "eval_steps_per_second": 1.519,
+        "epoch": 3.0
+      }
     }
   },
   "error": null

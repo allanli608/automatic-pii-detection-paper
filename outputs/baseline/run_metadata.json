@@ -1,7 +1,7 @@
 {
   "run_name": "baseline",
   "variant": "baseline",
-  "git_commit": "7a06734fa355b289e3b2b491daea65f867b4a709",
+  "git_commit": "dbc79304c5ce3b1696c3cebf1236765a08f942de",
   "overrides": {
     "RUN_NAME": "baseline",
     "SEED": 42,

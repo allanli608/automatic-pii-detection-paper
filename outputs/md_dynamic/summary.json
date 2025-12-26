@@ -1,0 +1,78 @@
+{
+  "folds": {
+    "0": {
+      "eval_loss": 0.007126476615667343,
+      "eval_fbeta": 0.9359877848249166,
+      "eval_precision": 0.45306725794530645,
+      "eval_recall": 0.9776714513556602,
+      "eval_runtime": 17.4883,
+      "eval_samples_per_second": 97.093,
+      "eval_steps_per_second": 1.544,
+      "epoch": 3.0
+    },
+    "1": {
+      "eval_loss": 0.006162046454846859,
+      "eval_fbeta": 0.9455796717839369,
+      "eval_precision": 0.468941979522184,
+      "eval_recall": 0.9856527977044461,
+      "eval_runtime": 17.6835,
+      "eval_samples_per_second": 96.927,
+      "eval_steps_per_second": 1.527,
+      "epoch": 3.0
+    },
+    "2": {
+      "eval_loss": 0.006825278978794813,
+      "eval_fbeta": 0.9378211177518404,
+      "eval_precision": 0.48314606741573,
+      "eval_recall": 0.9745042492917833,
+      "eval_runtime": 17.4303,
+      "eval_samples_per_second": 96.9,
+      "eval_steps_per_second": 1.549,
+      "epoch": 3.0
+    },
+    "3": {
+      "eval_loss": 0.005148593802005053,
+      "eval_fbeta": 0.9366085578446095,
+      "eval_precision": 0.4279507603186094,
+      "eval_recall": 0.9833610648918453,
+      "eval_runtime": 17.6596,
+      "eval_samples_per_second": 96.605,
+      "eval_steps_per_second": 1.529,
+      "epoch": 3.0
+    }
+  },
+  "summary": {
+    "eval_precision": {
+      "mean": 0.45827651630045746,
+      "std": 0.020488011902637483
+    },
+    "eval_fbeta": {
+      "mean": 0.9389992830513259,
+      "std": 0.003855978407838941
+    },
+    "eval_samples_per_second": {
+      "mean": 96.88125000000001,
+      "std": 0.1757816472217735
+    },
+    "epoch": {
+      "mean": 3.0,
+      "std": 0.0
+    },
+    "eval_runtime": {
+      "mean": 17.565424999999998,
+      "std": 0.10841778855427776
+    },
+    "eval_steps_per_second": {
+      "mean": 1.5372499999999998,
+      "std": 0.00944391338376208
+    },
+    "eval_recall": {
+      "mean": 0.9802973908109337,
+      "std": 0.004430646920958509
+    },
+    "eval_loss": {
+      "mean": 0.006315598962828517,
+      "std": 0.0007587449677996001
+    }
+  }
+}

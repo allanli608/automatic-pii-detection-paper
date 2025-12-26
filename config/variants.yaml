@@ -17,3 +17,18 @@ variants:
     model_mode: multi_dropout
     md_k: 5
     md_p: 0.2
+
+  md_dynamic:
+    weight_mode: dynamic
+    model_mode: multi_dropout
+    md_k: 5
+    md_p: 0.2
+
+  md_o_weight:
+    weight_mode: o_weight
+    model_mode: multi_dropout
+    o_weight: 0.05
+    md_k: 5
+    md_p: 0.2
+
+
