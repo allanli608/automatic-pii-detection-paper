@@ -1,0 +1,14 @@
+{
+  "runs": [
+    "baseline",
+    "dynamic",
+    "md",
+    "md_dynamic",
+    "md_o_weight",
+    "o_weight"
+  ],
+  "epochs": 5,
+  "batch_size": 1024,
+  "lr": 0.001,
+  "hidden_dim": 128
+}

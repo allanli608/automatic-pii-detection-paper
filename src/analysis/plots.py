@@ -61,11 +61,12 @@ def plot_variant_comparison(
     run_names = list(run_names)
     means: List[float] = []
     stds: List[float] = []
+    metric_key = metric if metric.startswith("eval_") else f"eval_{metric}"
 
     for run_name in run_names:
         summary_path = Path("outputs") / run_name / "summary.json"
         data = json.loads(summary_path.read_text())
-        stats = data.get("summary", {}).get(metric, {})
+        stats = data.get("summary", {}).get(metric_key, {})
         means.append(stats.get("mean", 0.0))
         stds.append(stats.get("std", 0.0))
 

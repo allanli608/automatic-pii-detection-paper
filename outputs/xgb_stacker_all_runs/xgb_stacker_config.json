@@ -1,0 +1,23 @@
+{
+  "runs": [
+    "baseline",
+    "dynamic",
+    "md",
+    "md_dynamic",
+    "md_o_weight",
+    "o_weight"
+  ],
+  "params": {
+    "objective": "multi:softprob",
+    "num_class": 15,
+    "eval_metric": "mlogloss",
+    "tree_method": "hist",
+    "max_depth": 6,
+    "eta": 0.1,
+    "subsample": 0.9,
+    "colsample_bytree": 0.9
+  },
+  "num_boost_round": 200,
+  "num_classes": 15,
+  "input_dim": 90
+}

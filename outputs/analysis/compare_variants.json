@@ -2,37 +2,37 @@
   {
     "run_name": "baseline",
     "metric": "fbeta",
-    "mean": null,
-    "std": null
+    "mean": 0.8850181195125761,
+    "std": 0.04082254678901618
   },
   {
     "run_name": "dynamic",
     "metric": "fbeta",
-    "mean": null,
-    "std": null
+    "mean": 0.9453268027617809,
+    "std": 0.004599789959037824
   },
   {
     "run_name": "md",
     "metric": "fbeta",
-    "mean": null,
-    "std": null
+    "mean": 0.8895672171214568,
+    "std": 0.03937636346387314
   },
   {
     "run_name": "md_dynamic",
     "metric": "fbeta",
-    "mean": null,
-    "std": null
+    "mean": 0.9389992830513259,
+    "std": 0.003855978407838941
   },
   {
     "run_name": "md_o_weight",
     "metric": "fbeta",
-    "mean": null,
-    "std": null
+    "mean": 0.9442479007550613,
+    "std": 0.0072915662026004704
   },
   {
     "run_name": "o_weight",
     "metric": "fbeta",
-    "mean": null,
-    "std": null
+    "mean": 0.9483087162287462,
+    "std": 0.004180097119624405
   }
 ]

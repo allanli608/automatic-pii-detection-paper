@@ -1,0 +1,12 @@
+{
+  "runs": [
+    "baseline",
+    "dynamic",
+    "md",
+    "md_dynamic",
+    "md_o_weight",
+    "o_weight"
+  ],
+  "input_dim": 90,
+  "num_labels": 15
+}

@@ -18,10 +18,11 @@ def compare_variants(
     run_names = list(run_names)
     report: List[dict] = []
 
+    metric_key = metric if metric.startswith("eval_") else f"eval_{metric}"
     for run_name in run_names:
         summary_path = Path("outputs") / run_name / "summary.json"
         data = json.loads(summary_path.read_text())
-        stats = data.get("summary", {}).get(metric, {})
+        stats = data.get("summary", {}).get(metric_key, {})
         report.append({
             "run_name": run_name,
             "metric": metric,

@@ -1,0 +1,102 @@
+{
+  "runs": [
+    "baseline",
+    "dynamic",
+    "md",
+    "md_dynamic",
+    "md_o_weight",
+    "o_weight"
+  ],
+  "fold_ensemble": {
+    "by_run": {
+      "baseline": {
+        "fbeta": 0.882737007051404,
+        "precision": 0.7435653002859864,
+        "recall": 0.88939566704675
+      },
+      "dynamic": {
+        "fbeta": 0.9453221288514647,
+        "precision": 0.46151111111111104,
+        "recall": 0.986697073356138
+      },
+      "md": {
+        "fbeta": 0.887187681580432,
+        "precision": 0.7663947797716147,
+        "recall": 0.8928164196123144
+      },
+      "md_dynamic": {
+        "fbeta": 0.9391579596066361,
+        "precision": 0.4586519651431619,
+        "recall": 0.9802356518434052
+      },
+      "md_o_weight": {
+        "fbeta": 0.9443063505815871,
+        "precision": 0.552506482281763,
+        "recall": 0.9718738122386922
+      },
+      "o_weight": {
+        "fbeta": 0.9484867447945665,
+        "precision": 0.5653515538902357,
+        "recall": 0.9749144811858605
+      }
+    },
+    "summary": {
+      "mean": {
+        "fbeta": 0.9245329787443484,
+        "precision": 0.5913301987473122,
+        "recall": 0.94932218421386
+      },
+      "max": {
+        "fbeta": 0.9484867447945665,
+        "precision": 0.7663947797716147,
+        "recall": 0.986697073356138
+      }
+    },
+    "best_run_by_metric": {
+      "run": "o_weight",
+      "metrics": {
+        "fbeta": 0.9484867447945665,
+        "precision": 0.5653515538902357,
+        "recall": 0.9749144811858605
+      }
+    }
+  },
+  "variant_ensemble": {
+    "fbeta": 0.9482370378815338,
+    "precision": 0.5827829651560008,
+    "recall": 0.9726339794754842
+  },
+  "mlp_stacker": {
+    "fbeta": 0.8657304682937822,
+    "precision": 0.8358373030414068,
+    "recall": 0.8669707335613832
+  },
+  "xgb_stacker": {
+    "fbeta": 0.8476683024301033,
+    "precision": 0.9702667249672056,
+    "recall": 0.8434055492208283
+  },
+  "method_ranking": [
+    {
+      "method": "variant_ensemble",
+      "score": 0.9482370378815338
+    },
+    {
+      "method": "fold_ensemble_mean",
+      "score": 0.9245329787443484
+    },
+    {
+      "method": "mlp_stacker",
+      "score": 0.8657304682937822
+    },
+    {
+      "method": "xgb_stacker",
+      "score": 0.8476683024301033
+    }
+  ],
+  "best_method": {
+    "metric": "fbeta",
+    "method": "variant_ensemble",
+    "score": 0.9482370378815338
+  }
+}
