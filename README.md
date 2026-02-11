@@ -1,4 +1,4 @@
-pii idea is cool :p
+Advisor: Professor Jun Zhu
 
 ## Project structure:
 - model stuff goes under `model_src/`
